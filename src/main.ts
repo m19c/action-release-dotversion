@@ -27,6 +27,10 @@ async function run(): Promise<void> {
       repo,
       tag: version.raw
     })
+
+    // eslint-disable-next-line no-console
+    console.log(existingRelease)
+
     if (existingRelease.status === 200) {
       release = existingRelease.data
     }
