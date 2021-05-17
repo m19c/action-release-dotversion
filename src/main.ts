@@ -22,24 +22,20 @@ async function run(): Promise<void> {
 
     let release: null | Release = null
 
-    core.info(`read ${version.raw} of ${owner}/${repo}`)
-    const existingRelease = await ok.rest.repos.getReleaseByTag({
-      owner,
-      repo,
-      tag: version.raw
-    })
+    try {
+      core.info(`read ${version.raw} of ${owner}/${repo}`)
+      const existingRelease = await ok.rest.repos.getReleaseByTag({
+        owner,
+        repo,
+        tag: version.raw
+      })
 
-    if (existingRelease.status === 200) {
       release = existingRelease.data
       core.info(
         `${version.raw} in ${owner}/${repo} found (${JSON.stringify(release)})`
       )
-    } else {
-      core.info(
-        `${version.raw} in ${owner}/${repo} not found; got: ${JSON.stringify(
-          existingRelease
-        )}`
-      )
+    } catch (err) {
+      core.info(`${version.raw} in ${owner}/${repo} not found`)
     }
 
     if (!release) {
