@@ -20,8 +20,9 @@ async function run(): Promise<void> {
     const repo = github.context.repo.repo
     const version = await util.determineVersion(options.versionFile)
 
-    //    let release: null | Release = null
+    let release: null | Release = null
 
+    core.info(`read ${version.raw} of ${owner}/${repo}`)
     const existingRelease = await ok.rest.repos.getReleaseByTag({
       owner,
       repo,
@@ -29,12 +30,20 @@ async function run(): Promise<void> {
     })
 
     if (existingRelease.status === 200) {
-      //release = existingRelease.data
+      release = existingRelease.data
+      core.info(
+        `${version.raw} in ${owner}/${repo} found (${JSON.stringify(release)})`
+      )
+    } else {
+      core.info(
+        `${version.raw} in ${owner}/${repo} not found; got: ${JSON.stringify(
+          existingRelease
+        )}`
+      )
     }
-    core.setOutput('existing_release', JSON.stringify(existingRelease))
-    /*
 
     if (!release) {
+      core.info(`creating ${version.raw} in ${owner}/${repo}...`)
       const createdRelease = await ok.rest.repos.createRelease({
         owner,
         repo,
@@ -43,11 +52,17 @@ async function run(): Promise<void> {
       })
 
       if (createdRelease.status === 201) {
+        core.info(
+          `successfully created version ${version.raw} in ${owner}/${repo}...`
+        )
         release = createdRelease.data
       }
     }
 
     if (!release) {
+      core.error(
+        `unable to create version ${version.raw} in ${owner}/${repo}...`
+      )
       throw new Error('Unable to create release')
     }
 
@@ -55,7 +70,6 @@ async function run(): Promise<void> {
     core.setOutput('tag_name', release.tag_name)
     core.setOutput('upload_url', release.upload_url)
     core.setOutput('html_url', release.html_url)
-    */
   } catch (err) {
     if (err instanceof config.InvalidConfigError) {
       core.setFailed(`invalid configuration: ${err.message}`)
