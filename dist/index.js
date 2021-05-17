@@ -108,17 +108,44 @@ function run() {
         try {
             const options = config.read();
             const ok = github.getOctokit(options.token);
+            const owner = github.context.repo.owner;
+            const repo = github.context.repo.repo;
             const version = yield util.determineVersion(options.versionFile);
-            const release = yield ok.rest.repos.createRelease({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                tag_name: version.raw,
-                prerelease: version.prerelease.length > 0
+            let release = null;
+            core.info(`read ${version.raw} of ${owner}/${repo}`);
+            const existingRelease = yield ok.rest.repos.getReleaseByTag({
+                owner,
+                repo,
+                tag: version.raw
             });
-            core.setOutput('id', release.data.id);
-            core.setOutput('tag_name', release.data.tag_name);
-            core.setOutput('upload_url', release.data.upload_url);
-            core.setOutput('html_url', release.data.html_url);
+            if (existingRelease.status === 200) {
+                release = existingRelease.data;
+                core.info(`${version.raw} in ${owner}/${repo} found (${JSON.stringify(release)})`);
+            }
+            else {
+                core.info(`${version.raw} in ${owner}/${repo} not found; got: ${JSON.stringify(existingRelease)}`);
+            }
+            if (!release) {
+                core.info(`creating ${version.raw} in ${owner}/${repo}...`);
+                const createdRelease = yield ok.rest.repos.createRelease({
+                    owner,
+                    repo,
+                    tag_name: version.raw,
+                    prerelease: version.prerelease.length > 0
+                });
+                if (createdRelease.status === 201) {
+                    core.info(`successfully created version ${version.raw} in ${owner}/${repo}...`);
+                    release = createdRelease.data;
+                }
+            }
+            if (!release) {
+                core.error(`unable to create version ${version.raw} in ${owner}/${repo}...`);
+                throw new Error('Unable to create release');
+            }
+            core.setOutput('id', release.id);
+            core.setOutput('tag_name', release.tag_name);
+            core.setOutput('upload_url', release.upload_url);
+            core.setOutput('html_url', release.html_url);
         }
         catch (err) {
             if (err instanceof config.InvalidConfigError) {
