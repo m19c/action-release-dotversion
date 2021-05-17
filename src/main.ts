@@ -28,8 +28,7 @@ async function run(): Promise<void> {
       tag: version.raw
     })
 
-    // eslint-disable-next-line no-console
-    console.log(existingRelease)
+    core.setOutput('existing_release', JSON.stringify(existingRelease))
 
     if (existingRelease.status === 200) {
       release = existingRelease.data
