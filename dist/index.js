@@ -112,18 +112,18 @@ function run() {
             const repo = github.context.repo.repo;
             const version = yield util.determineVersion(options.versionFile);
             let release = null;
-            core.info(`read ${version.raw} of ${owner}/${repo}`);
-            const existingRelease = yield ok.rest.repos.getReleaseByTag({
-                owner,
-                repo,
-                tag: version.raw
-            });
-            if (existingRelease.status === 200) {
+            try {
+                core.info(`read ${version.raw} of ${owner}/${repo}`);
+                const existingRelease = yield ok.rest.repos.getReleaseByTag({
+                    owner,
+                    repo,
+                    tag: version.raw
+                });
                 release = existingRelease.data;
                 core.info(`${version.raw} in ${owner}/${repo} found (${JSON.stringify(release)})`);
             }
-            else {
-                core.info(`${version.raw} in ${owner}/${repo} not found; got: ${JSON.stringify(existingRelease)}`);
+            catch (err) {
+                core.info(`${version.raw} in ${owner}/${repo} not found`);
             }
             if (!release) {
                 core.info(`creating ${version.raw} in ${owner}/${repo}...`);
