@@ -20,7 +20,7 @@ async function run(): Promise<void> {
     const repo = github.context.repo.repo
     const version = await util.determineVersion(options.versionFile)
 
-    let release: null | Release = null
+    //    let release: null | Release = null
 
     const existingRelease = await ok.rest.repos.getReleaseByTag({
       owner,
@@ -28,11 +28,11 @@ async function run(): Promise<void> {
       tag: version.raw
     })
 
-    core.setOutput('existing_release', JSON.stringify(existingRelease))
-
     if (existingRelease.status === 200) {
-      release = existingRelease.data
+      //release = existingRelease.data
     }
+    core.setOutput('existing_release', JSON.stringify(existingRelease))
+    /*
 
     if (!release) {
       const createdRelease = await ok.rest.repos.createRelease({
@@ -55,6 +55,7 @@ async function run(): Promise<void> {
     core.setOutput('tag_name', release.tag_name)
     core.setOutput('upload_url', release.upload_url)
     core.setOutput('html_url', release.html_url)
+    */
   } catch (err) {
     if (err instanceof config.InvalidConfigError) {
       core.setFailed(`invalid configuration: ${err.message}`)
