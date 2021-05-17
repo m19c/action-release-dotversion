@@ -1,11 +1,23 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'action-release-dotversion'
+description: 'Automatically tags the current workspace on file-change.'
+author: 'Marc "m19c" Binder <marcandrebinder@gmail.com>'
 inputs:
-  milliseconds: # change this
+  versionFile:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The version file'
+    default: '.version'
+  token:
+    required: true
+    description: 'The Github token. Typically this will be ${{ secrets.GITHUB_TOKEN }}.'
+outputs:
+  id:
+    description: 'The unique identifier of the created release.'
+  tag_name:
+    description: 'The tag_name of the created release.'
+  upload_url:
+    description: 'The URL to upload artifacts.'
+  html_url:
+    description: 'The Link to the release.'
 runs:
-  using: 'node12'
+  using: node12
   main: 'dist/index.js'
