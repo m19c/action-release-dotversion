@@ -4,6 +4,20 @@ import * as github from '@actions/github'
 import * as util from './util'
 import * as config from './config'
 
+// ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⣿⣿⣿⠟⠋⠉⠉⠉⠉⠉⠛⠻⠛⠉⠉⠛⠉⠻⢿⣿⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⣿⣿⠃⠄⣠⡶⢶⣶⣄⠄⠄⠄⢀⣴⣶⣶⣄⠄⠈⠻⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⠟⠁⠄⠄⣿⡇⢀⢻⣿⣷⡀⢰⣿⣿⠁⠈⣿⡇⠄⠄⠙⢿⣿⣿⣿
+// ⣿⣿⠟⢁⣀⣀⣀⡀⢿⡇⠘⣸⣿⣿⠁⢿⣿⣿⡘⠄⣿⠇⣀⣀⣀⣀⡉⠻⣿
+// ⡿⢃⣵⣿⣿⣿⡿⣿⠈⠻⠿⣿⠿⢋⣄⡜⠿⣿⣿⡾⠋⢠⡿⣿⣿⣿⣿⣦⡈
+// ⢁⣿⣿⠿⠿⣿⣧⡈⠓⠄⠄⣀⣤⣾⣿⣿⣦⣀⠄⠄⠄⠚⢁⣼⣿⣿⣿⣿⣿
+// ⣾⡿⢁⢶⣦⡈⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣾⣿⡿⢋⣭⡍⠙⣿⣿
+// ⣿⠃⣾⣄⠻⣿⣦⣈⡛⠻⠿⢿⠿⢿⣿⣿⠿⠿⠿⠟⠛⣁⣴⣿⠏⣡⠄⢿⣿
+// ⠙⠂⠙⣿⣷⣄⡙⠛⠻⠿⣶⣶⣶⣶⣶⣶⣶⣶⡶⠿⠿⠛⢋⣠⣾⡟⠄⠚⠛
+// ⣶⣤⡀⠄⠙⠻⠿⢷⣶⣦⣤⣤⣤⢤⣤⣤⣤⣤⣤⣴⣶⣾⠿⠟⠋⠄⠄⢀⣠
+// ⠟⣛⣩⣴⣤⣀⠄⠄⠄⠄⠉⠉⠈⠈⠉⠉⠉⠁⠄⠄⠄⠄⠄⠄⠄⣀⣐⣛⣻
+// ⣾⣿⣿⣿⣿⣿⣿⣷⣶⣶⣤⣤⣤⣤⣤⣤⣄⣠⣤⣤⣤⣤⣶⣾⣿⣿⣿⣿⣿
+
 interface Release {
   id: number
   tag_name: string
@@ -44,6 +58,7 @@ async function run(): Promise<void> {
         owner,
         repo,
         tag_name: version.raw,
+        body: options.body,
         prerelease: version.prerelease.length > 0
       })
 
