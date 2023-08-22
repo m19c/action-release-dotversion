@@ -67,11 +67,13 @@ async function run(): Promise<void> {
     core.setOutput('tag_name', release.tag_name)
     core.setOutput('upload_url', release.upload_url)
     core.setOutput('html_url', release.html_url)
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof config.InvalidConfigError) {
       core.setFailed(`invalid configuration: ${err.message}`)
-    } else {
+    } else if (err instanceof Error) {
       core.setFailed(err.message)
+    } else {
+      core.setFailed(String(err))
     }
   }
 }

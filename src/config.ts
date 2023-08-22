@@ -6,7 +6,7 @@ import * as core from '@actions/core'
 interface Options {
   versionFile: string
   token: string
-  body: string
+  body?: string
 }
 
 /**
@@ -32,17 +32,17 @@ export function read(): Readonly<Options> {
 
   options.token = core.getInput('token')
   if (options.token.length === 0) {
-    throw new InvalidConfigError(``)
+    throw new InvalidConfigError(`Missing input "token"`)
   }
 
   options.versionFile = core.getInput('versionFile')
   if (options.versionFile.length === 0) {
-    throw new InvalidConfigError(``)
+    throw new InvalidConfigError(`Missing input "versionFile"`)
   }
 
-  options.body = core.getInput('body')
-  if (options.body.length === 0) {
-    throw new InvalidConfigError(``)
+  const body = core.getInput('body').trim()
+  if (body.length !== 0) {
+    options.body = body
   }
 
   // finally, freeze the object to avoid changes

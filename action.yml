@@ -1,27 +1,26 @@
-name: 'action-release-dotversion'
-description: 'Automatically tags the current workspace on file-change.'
+name: "action-release-dotversion"
+description: "Automatically tags the current workspace on file-change."
 author: 'Marc "m19c" Binder <marcandrebinder@gmail.com>'
 inputs:
   versionFile:
     required: true
-    description: 'The version file'
-    default: '.version'
+    description: "The version file"
+    default: ".version"
   token:
     required: true
-    description: 'The Github token.'
+    description: "The Github token."
   body:
     required: false
-    description: 'The body of the release.'
-    default: 'No Body provided.'
+    description: "The body of the release."
 outputs:
   id:
-    description: 'The unique identifier of the created release.'
+    description: "The unique identifier of the created release."
   tag_name:
-    description: 'The tag_name of the created release.'
+    description: "The tag_name of the created release."
   upload_url:
-    description: 'The URL to upload artifacts.'
+    description: "The URL to upload artifacts."
   html_url:
-    description: 'The Link to the release.'
+    description: "The Link to the release."
 runs:
   using: node12
-  main: 'dist/index.js'
+  main: "dist/index.js"
