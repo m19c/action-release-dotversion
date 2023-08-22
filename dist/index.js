@@ -46,7 +46,8 @@ exports.InvalidConfigError = InvalidConfigError;
 function read() {
     const options = {
         versionFile: '',
-        token: ''
+        token: '',
+        body: ''
     };
     options.token = core.getInput('token');
     if (options.token.length === 0) {
@@ -54,6 +55,10 @@ function read() {
     }
     options.versionFile = core.getInput('versionFile');
     if (options.versionFile.length === 0) {
+        throw new InvalidConfigError(``);
+    }
+    options.body = core.getInput('body');
+    if (options.body.length === 0) {
         throw new InvalidConfigError(``);
     }
     // finally, freeze the object to avoid changes
@@ -131,6 +136,7 @@ function run() {
                     owner,
                     repo,
                     tag_name: version.raw,
+                    body: options.body,
                     prerelease: version.prerelease.length > 0
                 });
                 if (createdRelease.status === 201) {

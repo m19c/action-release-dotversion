@@ -6,6 +6,7 @@ import * as core from '@actions/core'
 interface Options {
   versionFile: string
   token: string
+  body: string
 }
 
 /**
@@ -25,7 +26,8 @@ export class InvalidConfigError extends Error {}
 export function read(): Readonly<Options> {
   const options: Options = {
     versionFile: '',
-    token: ''
+    token: '',
+    body: ''
   }
 
   options.token = core.getInput('token')
@@ -35,6 +37,11 @@ export function read(): Readonly<Options> {
 
   options.versionFile = core.getInput('versionFile')
   if (options.versionFile.length === 0) {
+    throw new InvalidConfigError(``)
+  }
+
+  options.body = core.getInput('body')
+  if (options.body.length === 0) {
     throw new InvalidConfigError(``)
   }
 

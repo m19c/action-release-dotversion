@@ -44,6 +44,7 @@ async function run(): Promise<void> {
         owner,
         repo,
         tag_name: version.raw,
+        body: options.body,
         prerelease: version.prerelease.length > 0
       })
 
