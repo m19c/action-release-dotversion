@@ -9,6 +9,10 @@ inputs:
   token:
     required: true
     description: 'The Github token.'
+  body:
+    required: false
+    description: 'The body of the release.'
+    default: 'No Body provided.'
 outputs:
   id:
     description: 'The unique identifier of the created release.'
